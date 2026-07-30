@@ -1,0 +1,71 @@
+{
+  "name": "chatlens",
+  "displayName": "ChatLens — Copilot Chat History Search",
+  "description": "Search, browse, and re-read your entire VS Code Copilot chat history. Local, read-only, offline.",
+  "version": "0.1.0",
+  "publisher": "PrashantVerma",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "repository": { "type": "git", "url": "https://github.com/prashantdce21MSFT/chatlens.git" },
+  "homepage": "https://github.com/prashantdce21MSFT/chatlens#readme",
+  "bugs": { "url": "https://github.com/prashantdce21MSFT/chatlens/issues" },
+  "keywords": ["copilot", "chat", "history", "search", "transcript", "ai", "sessions"],
+  "galleryBanner": { "color": "#0d1117", "theme": "dark" },
+  "engines": { "vscode": "^1.95.0" },
+  "categories": ["AI", "Other"],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "chatlens",
+          "title": "ChatLens",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "chatlens": [
+        {
+          "type": "webview",
+          "id": "chatlens.search",
+          "name": "Search Chats"
+        }
+      ]
+    },
+    "commands": [
+      { "command": "chatlens.refresh", "title": "ChatLens: Refresh Index", "icon": "$(refresh)" }
+    ],
+    "menus": {
+      "view/title": [
+        { "command": "chatlens.refresh", "when": "view == chatlens.search", "group": "navigation" }
+      ]
+    },
+    "configuration": {
+      "title": "ChatLens",
+      "properties": {
+        "chatlens.maxIndexKB": {
+          "type": "number",
+          "default": 40,
+          "description": "Maximum characters (KB) of each transcript to index for search."
+        },
+        "chatlens.days": {
+          "type": "number",
+          "default": 0,
+          "description": "Only index sessions from the last N days. 0 = all history."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.x",
+    "@types/vscode": "^1.95.0",
+    "typescript": "^5.5.0"
+  }
+}
