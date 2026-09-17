@@ -85,9 +85,20 @@ export function buildIndex(maxIndexKB: number, days: number): SessionMeta[] {
         if (cutoff && stat.mtimeMs < cutoff) {
             continue;
         }
+        // Only read the head of each file: we index at most `cap` chars and the
+        // metadata line sits at the start. Reading whole files chokes on huge
+        // sessions (hundreds of MB) and stalls indexing.
+        const readLimit = Math.min(stat.size, Math.max(cap, 512 * 1024));
         let raw: string;
         try {
-            raw = fs.readFileSync(file, 'utf8');
+            const fd = fs.openSync(file, 'r');
+            try {
+                const buf = Buffer.alloc(readLimit);
+                const bytes = fs.readSync(fd, buf, 0, readLimit, 0);
+                raw = buf.toString('utf8', 0, bytes);
+            } finally {
+                fs.closeSync(fd);
+            }
         } catch {
             continue;
         }

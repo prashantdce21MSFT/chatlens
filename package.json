@@ -2,7 +2,7 @@
   "name": "chatlens",
   "displayName": "ChatLens — Copilot Chat History Search",
   "description": "Search, browse, and re-read your entire VS Code Copilot chat history. Local, read-only, offline.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "PrashantVerma",
   "license": "MIT",
   "icon": "media/icon.png",
